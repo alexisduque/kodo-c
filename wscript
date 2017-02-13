@@ -180,6 +180,7 @@ def build(bld):
         bld.recurse('examples/reed_solomon')
         bld.recurse('examples/sliding_window')
         bld.recurse('examples/sparse_seed')
+        bld.recurse('examples/seed')
         bld.recurse('examples/switch_systematic_on_off')
         bld.recurse('examples/symbol_status_updater')
         bld.recurse('examples/udp_sender_receiver')

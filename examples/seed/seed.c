@@ -38,16 +38,16 @@ int main()
     srand(time(NULL));
 
     // Set the number of symbols and the symbol size
-    uint32_t max_symbols = 50;
-    uint32_t max_symbol_size = 3;
+    uint32_t max_symbols = 10;
+    uint32_t max_symbol_size = 100;
 
     // Here we select the codec we wish to use
-    int32_t codec = kodoc_sparse_seed;
+    int32_t codec = kodoc_seed;
 
     // Here we select the finite field to use.
     // For the sparse seed codec, we can choose kodoc_binary, kodoc_binary4 or
     // kodoc_binary8 (kodoc_binary is recommended for high performance)
-    int32_t finite_field = kodoc_binary;
+    int32_t finite_field = kodoc_binary8;
 
     kodoc_factory_t encoder_factory =
         kodoc_new_encoder_factory(codec, finite_field,
@@ -75,13 +75,11 @@ int main()
     uint32_t bytes_used;
     uint32_t payload_size = kodoc_payload_size(encoder);
     uint8_t* payload = (uint8_t*) malloc(payload_size);
-    printf("The payload size is %d\n", payload_size);
 
     // Allocate input and output data buffers
     uint32_t block_size = kodoc_block_size(encoder);
     uint8_t* data_in = (uint8_t*) malloc(block_size);
     uint8_t* data_out = (uint8_t*) malloc(block_size);
-    printf("The block size is %d\n", block_size);
 
     // Fill the input buffer with random data
     uint32_t i = 0;
@@ -94,7 +92,6 @@ int main()
 
     // Install a custom trace function for the decoder
     kodoc_set_trace_callback(decoder, trace_callback, NULL);
-    kodoc_set_trace_stdout(encoder);
 
     uint32_t lost_payloads = 0;
     uint32_t received_payloads = 0;
@@ -115,7 +112,6 @@ int main()
         // Pass the generated packet to the decoder
         received_payloads++;
         kodoc_read_payload(decoder, payload);
-        printf("Payload = %s\n", payload);
         printf("Payload processed by decoder, current rank = %d\n\n",
                kodoc_rank(decoder));
     }
